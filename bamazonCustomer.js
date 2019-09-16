@@ -18,7 +18,7 @@ let connection = mysql.createConnection({
 })
 
 // CONNECTION TO DB
-connection.connect(function (err) {
+connection.connect( (err) => {
   if (err) throw err;
 
   console.log(`connected as id ${connection.threadId}`)
@@ -43,6 +43,8 @@ let displayProducts = () => {
 }
 
 let findProduct = (userChoice, userAmount) => {
+
+  // const chosenItem = results.find(r => r.item_id == userChoice)
 
   connection.query("SELECT * FROM products WHERE ?",
     {
