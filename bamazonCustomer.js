@@ -46,12 +46,8 @@ let findProduct = (userChoice, userAmount) => {
 
   // const chosenItem = results.find(r => r.item_id == userChoice)
 
-  connection.query("SELECT * FROM products WHERE ?",
-    {
-      item_id: userChoice
-    },
+  connection.query(`SELECT * FROM products WHERE item_id = ${userChoice}`, (err, res) => {
 
-    function (err, res) {
       if (err) throw err;
       res.forEach(({ price, stock_quantity }) => {
 
@@ -81,8 +77,7 @@ let updateAmount = (userChoice, stockLeft) => {
       {
         item_id: userChoice
       }
-    ],
-    function(err, res) {
+    ], (err, res) => {
       if (err) throw err;
       console.log(res.affectedRows)
 
@@ -101,9 +96,9 @@ let productChoice = (res) => {
       name: "confirm",
       message: "would you like to make a purchase?"
     }
-  ]).then(response => {
+  ]).then(( {confirm} ) => {
 
-    if (!response.confirm) {
+    if (!confirm) {
       connection.end();
     }
     else {
@@ -113,7 +108,7 @@ let productChoice = (res) => {
           type: "list",
           name: "productChoice",
           message: "what is the id of the product you would like to purchase?",
-          choices: function () {
+          choices: () => {
             return res.map(r => r.item_id)
           }
         },
@@ -122,9 +117,9 @@ let productChoice = (res) => {
           name: "productNumber",
           message: "how many would you like to purchase?"
         }
-      ]).then(response => {
+      ]).then(( {productChoice, productNumber} ) => {
     
-        findProduct(response.productChoice, response.productNumber)
+        findProduct(productChoice, productNumber)
     
       })
 
