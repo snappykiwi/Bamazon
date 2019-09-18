@@ -1,11 +1,11 @@
 // NPM IMPORTS
-let inquirer = require("inquirer");
-let mysql = require("mysql");
+const inquirer = require("inquirer");
+const mysql = require("mysql");
 
 require('dotenv').config();
 
 // DATABASE SET UP
-let connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: process.env.DB_HOST,
 
   port: 3306,
@@ -57,35 +57,44 @@ let viewLowInventory = () => {
 
 let addInventory = () => {
 
+  connection.query("SELECT * FROM products", (err, res) => {
+    if (err) throw err;
 
-  inquirer.prompt([
-    {
-      type: "number",
-      name: "addInventory",
-      message: "choose the id of the item you would like to add more of"
-    },
-    {
-      type: "number",
-      name: "addAmount",
-      message: "How many would you like to order for your inventory?"
-    }
-  ]).then(({ addInventory, addAmount }) => {
+    printInfo(res);
 
-    connection.query(`
-    UPDATE products 
-    SET stock_quantity = stock_quantity + ${addAmount} 
-    WHERE item_id=${addInventory}`,
-      (err, res) => {
-        if (err) throw err;
+    inquirer.prompt([
+      {
+        type: "choice",
+        name: "addInventory",
+        message: "choose the id of the item you would like to add more of",
+        choices: () => {
+          res.map(r => r.item_id);
+        }
+      },
+      {
+        type: "number",
+        name: "addAmount",
+        message: "How many would you like to order for your inventory?"
+      }
+    ]).then(({ addInventory, addAmount }) => {
 
-        console.log(`
+      connection.query(`
+      UPDATE products 
+      SET stock_quantity = stock_quantity + ${addAmount} 
+      WHERE item_id=${addInventory}`,
+        (err, res) => {
+          if (err) throw err;
+
+          console.log(`
         Updating ${res.affectedRows} product: adding ${addAmount} items to inventory
         `)
 
-        displayOptions();
-      })
+          displayOptions();
+        })
 
+    })
   })
+
 
 }
 

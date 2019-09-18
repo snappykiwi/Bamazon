@@ -1,11 +1,11 @@
 // NPM IMPORTS
-let inquirer = require("inquirer");
-let mysql = require("mysql");
+const inquirer = require("inquirer");
+const mysql = require("mysql");
 
 require('dotenv').config();
 
 // DATABASE SET UP
-let connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: process.env.DB_HOST,
 
   port: 3306,
@@ -49,39 +49,44 @@ let findProduct = (userChoice, userAmount) => {
   connection.query(`SELECT * FROM products WHERE item_id = ${userChoice}`, (err, res) => {
 
       if (err) throw err;
-      res.forEach(({ price, stock_quantity }) => {
+      res.forEach(({ price, stock_quantity, product_sales }) => {
 
-        console.log(`${price} | ${stock_quantity}`)
+        // console.log(`${price} | ${stock_quantity}`)
 
         if (stock_quantity > userAmount) {
-          let stockLeft = stock_quantity - userAmount;
-          console.log(`Your total is: $${parseFloat(price) * parseFloat(userAmount)}`)
-          updateAmount(userChoice, stockLeft)
+
+          let stockLeft = parseFloat(stock_quantity) - parseFloat(userAmount);
+          let totalPrice = parseFloat(price) * parseFloat(userAmount)
+          product_sales += totalPrice;
+
+          console.log(`
+          Your total is: $${totalPrice}
+          `)
+          updateAmount(userChoice, "stock_quantity", stockLeft)
+          updateAmount(userChoice, "product_sales", product_sales)
+
         }
         else {
           console.log("Insufficient Quantity!")
-          displayProducts();
+
         }
+
+        displayProducts();
       })
     }
   )
 }
 
-let updateAmount = (userChoice, stockLeft) => {
+let updateAmount = (userChoice, columnChange, changeTo) => {
 
-  connection.query("UPDATE products SET ? WHERE ?",
+  connection.query(`UPDATE products SET ${columnChange} = ${changeTo} WHERE ?`,
     [
-      {
-        stock_quantity: stockLeft
-      },
       {
         item_id: userChoice
       }
     ], (err, res) => {
       if (err) throw err;
-      console.log(res.affectedRows)
 
-      displayProducts();
     }
   )
 }
