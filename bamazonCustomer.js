@@ -26,8 +26,6 @@ const connection = mysql.createConnection({
 // CONNECTION TO DB
 connection.connect((err) => {
   if (err) throw err;
-
-  displayProducts();
 })
 
 
@@ -114,7 +112,7 @@ let productChoice = (res) => {
   ]).then(({ confirm }) => {
 
     if (!confirm) {
-      connection.end();
+      process.exit();
     }
     else {
 
@@ -140,4 +138,8 @@ let productChoice = (res) => {
 
     }
   })
+}
+
+module.exports = {
+  displayProducts: displayProducts
 }

@@ -17,7 +17,7 @@ You can choose to view as a customer, manager, or a supervisor; each with their 
 
 There are three different user options for this app: 
 
-  1. **CUSTOMER**
+1. **CUSTOMER**
 
   Customers are able to view the products available and decide if they would like to make a purchase.
 
@@ -28,7 +28,7 @@ There are three different user options for this app:
   ![customer purchase](./assets/images/customerPurchase.png)
 
 
-  1. **MANAGER**
+1. **MANAGER**
 
   Managers are able to: 
 
@@ -47,7 +47,7 @@ There are three different user options for this app:
   ![manager new product](./assets/images/managerNewProduct.png)
 
 
-  1. **SUPERVISOR**
+1. **SUPERVISOR**
 
   Supervisors have the ability to view the departments and all of the information which goes with them, or to add a new department 
 

@@ -27,7 +27,6 @@ connection.connect((err) => {
 
   if (err) throw err
 
-  promptSupervisor();
 })
 
 
@@ -112,9 +111,13 @@ let promptSupervisor = () => {
         break;
       
       default:
-        connection.end();
+        process.exit();
 
     }
 
   })
+}
+
+module.exports = {
+  promptSupervisor: promptSupervisor
 }

@@ -10,7 +10,7 @@ let config,
 
 require('dotenv').config();
 
-// DATABASE SET UP
+// // DATABASE SET UP
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
 
@@ -27,7 +27,6 @@ connection.connect((err) => {
 
   if (err) throw err;
 
-  displayOptions();
 });
 
 let printInfo = (res) => {
@@ -182,11 +181,15 @@ let displayOptions = () => {
         break;
 
       case "Exit":
-        connection.end();
+        process.exit();
         break;
 
       default:
         console.log("Invalid command. Please try again.")
     }
   })
+}
+
+module.exports = {
+  displayOptions: displayOptions
 }
