@@ -19,43 +19,43 @@ There are three different user options for this app:
 
   1. **CUSTOMER**
 
-    Customers are able to view the products available and decide if they would like to make a purchase.
+  Customers are able to view the products available and decide if they would like to make a purchase.
 
-    ![customer prompt](./assets/images/customerPrompt.png)
+  ![customer prompt](./assets/images/customerPrompt.png)
 
-    They can then decide what they would like to purchase and how much of it, and it will display a total cost
+  They can then decide what they would like to purchase and how much of it, and it will display a total cost
 
-    ![customer purchase](./assets/images/customerPurchase.png)
+  ![customer purchase](./assets/images/customerPurchase.png)
 
 
   1. **MANAGER**
 
-    Managers are able to: 
+  Managers are able to: 
 
-    ![manager options](./assets/images/managerOptions.png)
+  ![manager options](./assets/images/managerOptions.png)
 
-    View all of the products available or view just the products with low inventory
+  View all of the products available or view just the products with low inventory
 
-    ![manager view](./assets/images/managerView.png)
+  ![manager view](./assets/images/managerView.png)
 
-    Add more stock of a particular item
+  Add more stock of a particular item
 
-    ![manager add to inventory](./assets/images/managerAddToInventory.png)
+  ![manager add to inventory](./assets/images/managerAddToInventory.png)
 
-    Or add a completely new item to the store
+  Or add a completely new item to the store
 
-    ![manager new product](./assets/images/managerNewProduct.png)
+  ![manager new product](./assets/images/managerNewProduct.png)
 
 
   1. **SUPERVISOR**
 
-    Supervisors have the ability to view the departments and all of the information which goes with them, or to add a new department 
+  Supervisors have the ability to view the departments and all of the information which goes with them, or to add a new department 
 
-    ![supervisor options](./assets/images/supervisorOptions.png)
+  ![supervisor options](./assets/images/supervisorOptions.png)
 
-    ![supervisor view](./assets/images/supervisorView.png)
+  ![supervisor view](./assets/images/supervisorView.png)
 
-    ![supervisor new dept](./assets/images/supervisorNewDept.png)
+  ![supervisor new dept](./assets/images/supervisorNewDept.png)
 
 
 
