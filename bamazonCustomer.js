@@ -1,6 +1,12 @@
 // NPM IMPORTS
-const inquirer = require("inquirer");
-const mysql = require("mysql");
+const inquirer = require("inquirer"),
+  mysql = require("mysql"),
+  colors = require("colors"),
+  { table } = require("table");
+
+let config,
+  data,
+  output;
 
 require('dotenv').config();
 
@@ -18,7 +24,7 @@ const connection = mysql.createConnection({
 })
 
 // CONNECTION TO DB
-connection.connect( (err) => {
+connection.connect((err) => {
   if (err) throw err;
 
   displayProducts();
@@ -28,16 +34,24 @@ connection.connect( (err) => {
 // DATABASE QUERIES
 let displayProducts = () => {
 
-  connection.query("SELECT * FROM products", 
+  connection.query("SELECT * FROM products",
     function (err, res) {
-    if (err) throw err;
+      if (err) throw err;
 
-    res.forEach(({ item_id, product_name, price }) => {
-      console.log(`${item_id} | ${product_name} | ${price}`)
+      data = [['item_id'.blue, 'product_name'.blue, 'price'.blue]]
+
+      res.forEach(({ item_id, product_name, price }) => {
+        let arr = []
+        arr.push(item_id, product_name, price)
+        data.push(arr)
+      })
+
+      output = table(data);
+  
+      console.log(output);
+
+      productChoice(res);
     })
-
-    productChoice(res);
-  })
 }
 
 let findProduct = (userChoice, userAmount) => {
@@ -46,32 +60,30 @@ let findProduct = (userChoice, userAmount) => {
 
   connection.query(`SELECT * FROM products WHERE item_id = ${userChoice}`, (err, res) => {
 
-      if (err) throw err;
-      res.forEach(({ price, stock_quantity, product_sales }) => {
+    if (err) throw err;
+    res.forEach(({ price, stock_quantity, product_sales }) => {
 
-        // console.log(`${price} | ${stock_quantity}`)
+      if (stock_quantity > userAmount) {
 
-        if (stock_quantity > userAmount) {
+        let stockLeft = parseFloat(stock_quantity) - parseFloat(userAmount);
+        let totalPrice = parseFloat(price) * parseFloat(userAmount)
+        product_sales += totalPrice;
 
-          let stockLeft = parseFloat(stock_quantity) - parseFloat(userAmount);
-          let totalPrice = parseFloat(price) * parseFloat(userAmount)
-          product_sales += totalPrice;
-
-          console.log(`
-          Your total is: $${totalPrice}
+        console.log(`
+          Your total is: ${totalPrice}
           `)
-          updateAmount(userChoice, "stock_quantity", stockLeft)
-          updateAmount(userChoice, "product_sales", product_sales)
+        updateAmount(userChoice, "stock_quantity", stockLeft)
+        updateAmount(userChoice, "product_sales", product_sales)
 
-        }
-        else {
-          console.log("Insufficient Quantity!")
+      }
+      else {
+        console.log("Insufficient Quantity!")
 
-        }
+      }
 
-        displayProducts();
-      })
-    }
+      displayProducts();
+    })
+  }
   )
 }
 
@@ -99,13 +111,13 @@ let productChoice = (res) => {
       name: "confirm",
       message: "would you like to make a purchase?"
     }
-  ]).then(( {confirm} ) => {
+  ]).then(({ confirm }) => {
 
     if (!confirm) {
       connection.end();
     }
     else {
-      
+
       inquirer.prompt([
         {
           type: "list",
@@ -120,10 +132,10 @@ let productChoice = (res) => {
           name: "productNumber",
           message: "how many would you like to purchase?"
         }
-      ]).then(( {productChoice, productNumber} ) => {
-    
+      ]).then(({ productChoice, productNumber }) => {
+
         findProduct(productChoice, productNumber)
-    
+
       })
 
     }

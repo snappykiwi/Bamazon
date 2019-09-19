@@ -1,6 +1,12 @@
 // NPM IMPORTS
-const inquirer = require("inquirer");
-const mysql = require("mysql");
+const inquirer = require("inquirer"),
+  mysql = require("mysql"),
+  colors = require("colors"),
+  { table } = require("table");
+
+let config,
+  data,
+  output;
 
 require('dotenv').config();
 
@@ -26,11 +32,18 @@ connection.connect((err) => {
 
 let printInfo = (res) => {
 
-  return res.forEach(({ item_id, product_name, price, stock_quantity }) => {
-    console.log(`
-    ${item_id} | ${product_name} | $${price} | ${stock_quantity}
-    `)
+  data = [ ['item_id'.blue, 'product_name'.blue, 'price'.blue, 'stock_quantity'.blue] ]
+  res.forEach(({ item_id, product_name, price, stock_quantity }) => {
+    let arr = []
+
+    arr.push(item_id, product_name, price, stock_quantity)
+    data.push(arr)
+
   });
+
+  output = table(data);
+  
+  console.log(output);
 
 }
 

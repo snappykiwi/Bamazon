@@ -35,10 +35,7 @@ let displayTable = () => {
 
   console.log("displaying...")
 
-  data = [
-    ['department_id'.blue, 'department_name'.blue, 'overhead_costs'.blue, 'product_sales'.blue, 'total_profit'.blue],
-
-  ];
+  data = [ ['department_id'.blue, 'department_name'.blue, 'overhead_costs'.blue, 'product_sales'.blue, 'total_profit'.blue] ];
 
   connection.query(`
   SELECT departments.department_id, departments.department_name, departments.overhead_costs, SUM(products.product_sales) AS product_sales, SUM(product_sales - departments.overhead_costs) AS total_profit
@@ -50,9 +47,9 @@ let displayTable = () => {
   (err, res) => {
     if (err) throw err;
 
-    res.forEach(({department_id, department_name, overhead_costs, product_sales, total_profit}) => {
+    res.forEach(({department_id, department_name, overhead_costs, product_sales}) => {
       let arr = []
-      arr.push(department_id, department_name, overhead_costs, product_sales, total_profit)
+      arr.push(department_id, department_name, overhead_costs, product_sales, product_sales-overhead_costs)
       data.push(arr)
 
     })
@@ -80,12 +77,12 @@ let createDept = () => {
     }
   ]).then(({ deptName, overhead }) => {
 
-    connection.query(`INSERT INTO departments('department_name', 'overhead_costs') 
+    connection.query(`INSERT INTO departments(department_name, overhead_costs) 
     VALUES('${deptName}', '${overhead}')`, 
     (err, res) => {
       if (err) throw err;
 
-      console.log(`You have added the department: ${res.department_name}`)
+      console.log(`You have added a new department to your store!`)
 
       promptSupervisor();
     })
